@@ -1,4 +1,4 @@
-
+import java.lang.reflect.Array;
 
 public class InvoiveGenerator {
     private static final double MIN_COST_PER_KILOMETER = 10.0;
@@ -20,5 +20,11 @@ public class InvoiveGenerator {
             totalFare += calculateFare(ride.distance, ride.time);
         }
         return totalFare;
+    }
+
+    public EnhancedInvoice enhancedInvoice(Ride[] rides) {
+        double totalFare = calculateFare(rides);
+        int numOfRides = rides.length;
+        return new EnhancedInvoice(numOfRides, totalFare);
     }
 }
