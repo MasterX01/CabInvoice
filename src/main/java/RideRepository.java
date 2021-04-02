@@ -10,7 +10,7 @@ public class RideRepository {
            for (Ride ride : rides) {
                ridesData.get(userId).add(ride);
            }
-       }catch (NullPointerException e){
+       }catch (Exception e){
            ridesData.put(userId, Arrays.asList(rides));
            }
     }

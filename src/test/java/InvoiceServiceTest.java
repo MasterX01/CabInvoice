@@ -1,47 +1,46 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.List;
-
 public class InvoiceServiceTest {
     @Test
     public void givenDistanceAndTime_ShouldReturnTotalFare(){
-        InvoiveGenerator invoiveGenerator = new InvoiveGenerator();
+        InvoiceGenerator invoiveGenerator = new InvoiceGenerator();
         double distance = 2.0;
         int time = 5;
-        double fare = invoiveGenerator.calculateFare(distance, time);
+        String rideType = "normal";
+        double fare = invoiveGenerator.calculateFare(distance, time, rideType);
         Assertions.assertEquals(25, fare, 0.0);
     }
 
     @Test
     public void givenLessDistanceAndTime_ShouldReturnMinFare(){
-        InvoiveGenerator invoiveGenerator = new InvoiveGenerator();
+        InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
         double distance = 0.1;
         int time = 1;
-        double fare = invoiveGenerator.calculateFare(distance, time);
+        String rideType = "normal";
+        double fare = invoiceGenerator.calculateFare(distance, time, rideType);
         Assertions.assertEquals(5, fare, 0.0);
     }
 
     @Test
     public void givenMultipleValue_ShouldReturnTotalFare(){
-        InvoiveGenerator invoiveGenerator = new InvoiveGenerator();
+        InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
         Ride[] rides = {
-                        new Ride(2.0, 5),
-                        new Ride(0.1, 1)
+                        new Ride(2.0, 5, "normal"),
+                        new Ride(0.1, 1, "normal")
                         };
-        double fare = invoiveGenerator.calculateFare(rides);
+        double fare = invoiceGenerator.calculateFare(rides);
         Assertions.assertEquals(30, fare, 0.0);
     }
 
     @Test
     public void givenMultipleValues_ShouldReturnEnhancedInvoice(){
-        InvoiveGenerator invoiveGenerator = new InvoiveGenerator();
+        InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
         Ride[] rides = {
-                new Ride(2.0, 5),
-                new Ride(0.1, 1)
+                new Ride(2.0, 5, "normal"),
+                new Ride(0.1, 1, "normal")
         };
-        EnhancedInvoice enhancedInvoice = invoiveGenerator.enhancedInvoice(rides);
+        EnhancedInvoice enhancedInvoice = invoiceGenerator.enhancedInvoice(rides);
         Assertions.assertEquals(2, enhancedInvoice.getNumOfRides());
         Assertions.assertEquals(15.0, enhancedInvoice.getAvgFare(), 0.0);
         Assertions.assertEquals(30, enhancedInvoice.getTotalFare(), 0.0);
@@ -49,14 +48,30 @@ public class InvoiceServiceTest {
 
     @Test
     public void givenUserIDAndRides_ShouldReturnEnhancedInvoice(){
-        InvoiveGenerator invoiveGenerator = new InvoiveGenerator();
+        InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
         Ride[] rides = {
-                new Ride(2.0, 5),
-                new Ride(0.1, 1)
+                new Ride(2.0, 5, "normal"),
+                new Ride(0.1, 1, "normal")
         };
         String userID = "MasterX";
-        invoiveGenerator.addRides(userID, rides);
-        EnhancedInvoice enhancedInvoice = invoiveGenerator.enhancedInvoiceForUserID(userID);
+        invoiceGenerator.addRides(userID, rides);
+        EnhancedInvoice enhancedInvoice = invoiceGenerator.enhancedInvoiceForUserID(userID);
         Assertions.assertEquals(2, enhancedInvoice.getNumOfRides());
+        Assertions.assertEquals(30, enhancedInvoice.getTotalFare());
     }
+
+    @Test
+    public void givenUserIDAndRides_whenPremiumUser_ShouldReturnEnhancedInvoice(){
+        InvoiceGenerator invoiceGenerator = new InvoiceGenerator();
+        Ride[] rides = {
+                new Ride(2.0, 5, "premium"),
+                new Ride(0.1, 1, "premium")
+        };
+        String userID = "MasterX";
+        invoiceGenerator.addRides(userID, rides);
+        EnhancedInvoice enhancedInvoice = invoiceGenerator.enhancedInvoiceForUserID(userID);
+        Assertions.assertEquals(2, enhancedInvoice.getNumOfRides());
+        Assertions.assertEquals(60, enhancedInvoice.getTotalFare());
+    }
+
 }

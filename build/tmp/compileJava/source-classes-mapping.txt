@@ -1,8 +1,8 @@
+EnhancedInvoice.java
+ EnhancedInvoice
 Ride.java
  Ride
 RideRepository.java
  RideRepository
-InvoiveGenerator.java
- InvoiveGenerator
-EnhancedInvoice.java
- EnhancedInvoice
+InvoiceGenerator.java
+ InvoiceGenerator

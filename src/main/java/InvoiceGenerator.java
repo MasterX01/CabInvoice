@@ -1,12 +1,21 @@
-import java.lang.reflect.Array;
-import java.util.List;
+public class InvoiceGenerator {
 
-public class InvoiveGenerator {
-    private static final double MIN_COST_PER_KILOMETER = 10.0;
-    private static final int COST_PER_TIME = 1;
-    private static final double MIN_FARE = 5.0;
+    private double MIN_COST_PER_KILOMETER;
+    private int COST_PER_TIME;
+    private double MIN_FARE;
 
-    public double calculateFare(double distance, int time) {
+
+    public double calculateFare(double distance, int time, String rideType) {
+        if(rideType.equalsIgnoreCase("normal")){
+            MIN_COST_PER_KILOMETER = 10;
+            COST_PER_TIME = 1;
+            MIN_FARE = 5;
+        }
+        if(rideType.equalsIgnoreCase("premium")){
+            MIN_COST_PER_KILOMETER = 15;
+            COST_PER_TIME = 2;
+            MIN_FARE = 20;
+        }
         double totalFare =  distance * MIN_COST_PER_KILOMETER + time * COST_PER_TIME;
         if(totalFare < MIN_FARE){
             return MIN_FARE;
@@ -18,15 +27,13 @@ public class InvoiveGenerator {
     public double calculateFare(Ride[] rides) {
         double totalFare = 0;
         for (Ride ride: rides) {
-            totalFare += calculateFare(ride.distance, ride.time);
+            totalFare += calculateFare(ride.distance, ride.time, ride.rideType);
         }
         return totalFare;
     }
 
     public EnhancedInvoice enhancedInvoice(Ride[] rides) {
-        double totalFare = calculateFare(rides);
-        int numOfRides = rides.length;
-        return new EnhancedInvoice(numOfRides, totalFare);
+        return new EnhancedInvoice(rides.length, calculateFare(rides));
     }
 
     public void addRides(String userID, Ride[] rides) {
@@ -39,4 +46,5 @@ public class InvoiveGenerator {
         rideRepository.getRidesData(userID).toArray(rides);
         return new EnhancedInvoice(rides.length, calculateFare(rides));
     }
+
 }
